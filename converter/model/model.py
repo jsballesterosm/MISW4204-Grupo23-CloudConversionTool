@@ -53,7 +53,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     id = fields.Int()
     username = fields.Str()
     password = fields.Str()
-    email = fields.Str()
+    email = fields.Email()
     class Meta:
         model = User
         include_relationships = True
@@ -69,3 +69,7 @@ class UserSignupSchema(UserSchema):
     class Meta:
         model = User
         ordered = True
+
+class UserLoginSchema(UserSchema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True)

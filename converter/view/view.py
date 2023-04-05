@@ -1,7 +1,9 @@
-from flask_restful import Resource
-from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema
-from flask import request
 from marshmallow import ValidationError
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_restful import Resource
+from flask import request
+from datetime import timedelta
+from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema
 
 user_schema = UserSchema()
 task_schema = TaskSchema()
@@ -36,11 +38,56 @@ class Signup(Resource):
             return {"message": "User created successfully"}, 200
         except ValidationError as e:
             return {"message": e.messages}, 400
+        
+class Login(Resource):
+    def post(self):
+        try:
+            # Obtenemos el request body y lo deserializamos con Marshmallow
+            login_data = UserLoginSchema().load(request.json, session=db.session)
+            user = User.query.filter_by(username=login_data.username).first()
+            
+            # Si no se emcuentra el usuario o la contraseña es incorrecta se devuelve un error
+            if not user:
+                return {"message": "User not found"}, 404
+            
+            if user.password != login_data.password:
+                return {"message": "Incorrect password"}, 401
+            
+            # Si todo es correcto se crea un token jwt
+            access_token = create_access_token(identity=user.username, expires_delta=timedelta(hours=2))
+            return {"access_token": access_token}, 200
+            
+        except ValidationError as e:
+            return {"message": e.messages}, 400
+
 
 class UserList(Resource):
+    @jwt_required()
     def get(self):
         return [user_schema.dump(user) for user in User.query.all()]
 
 class TaskList(Resource):
+    @jwt_required()
     def get(self):
-        return [task_schema.dump(task) for task in Task.query.all()]
+        current_username = get_jwt_identity()
+        user = User.query.filter_by(username=current_username).first()
+
+        # Obtener los parámetros de la solicitud en caso de que sean enviados
+        max_results = request.args.get('max', default=None, type=int)
+        order_by = request.args.get('order', default=None, type=int)
+
+        # Construir una nueva consulta a partir de la relación 'tasks' del usuario
+        tasks_query = db.session.query(Task).filter(Task.user == user.id)
+        
+        # Ordenar las tareas según el parámetro order_by
+        if order_by is not None:
+            tasks_query = tasks_query.order_by(Task.id.asc() if order_by == 0 else Task.id.desc())
+        
+        # Filtrar la cantidad de resultados según el parámetro max_results
+        if max_results is not None:
+            tasks_query = tasks_query.limit(max_results)
+        
+        # Ejecutar la consulta y devolver las tareas serializadas
+        tasks = tasks_query.all()
+
+        return [task_schema.dump(tasks, many=True)]
