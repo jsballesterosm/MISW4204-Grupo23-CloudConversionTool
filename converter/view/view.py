@@ -4,12 +4,17 @@ from flask_restful import Resource
 from flask import request
 from datetime import timedelta
 from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema
+from ..tasks import convert_file
+import os
 
 user_schema = UserSchema()
 task_schema = TaskSchema()
 signup_schema = UserSignupSchema()
 
-class Signup(Resource):
+upload_folder = './upload'
+download_folder = './download'
+
+class SignupView(Resource):
     def post(self):
         try:
             # Obtenemos el request body y lo deserializamos con Marshmallow
@@ -39,7 +44,7 @@ class Signup(Resource):
         except ValidationError as e:
             return {"message": e.messages}, 400
         
-class Login(Resource):
+class LoginView(Resource):
     def post(self):
         try:
             # Obtenemos el request body y lo deserializamos con Marshmallow
@@ -61,14 +66,31 @@ class Login(Resource):
             return {"message": e.messages}, 400
 
 
-class UserList(Resource):
+class UserListView(Resource):
     @jwt_required()
     def get(self):
         return [user_schema.dump(user) for user in User.query.all()]
+    
+class TaskView(Resource):
+    @jwt_required()
+    def get(self, id_task):
+        return task_schema.dump(Task.query.get_or_404(id_task))
+    
+    @jwt_required()
+    def delete(self, id_task):
+        # Obtener la tarea que se quiere eliminar
+        task = Task.query.get_or_404(id_task)
 
-class TaskList(Resource):
+        # Borrarla de la base de datos
+        db.session.delete(task)
+        db.session.commit()
+        
+        return '',204
+
+class TaskListView(Resource):
     @jwt_required()
     def get(self):
+        # Se obtiene el usuario que está logueado
         current_username = get_jwt_identity()
         user = User.query.filter_by(username=current_username).first()
 
@@ -91,3 +113,32 @@ class TaskList(Resource):
         tasks = tasks_query.all()
 
         return [task_schema.dump(tasks, many=True)]
+    
+    @jwt_required()
+    def post(self):
+        # Se obtiene el usuario que está logueado
+        current_username = get_jwt_identity()
+        user = User.query.filter_by(username=current_username).first()
+
+        # Se cargan los valores de ka ruta del archivo y la nueva extensión 
+        file = request.json["fileName"]
+        new_format = request.json["newFormat"]
+        
+        # A partir de los valores establecidos se crea el path
+        file_path = os.path.join(upload_folder, file)
+
+        # Se crea la nueva tarea en base de datos
+        new_task = Task(fileName=file, newFormat=new_format)
+        new_task.user = user.id
+        db.session.add(new_task)
+        db.session.commit()
+
+        # Se encola la tarea
+        task = convert_file.delay(file_path, new_format)
+
+        return 'Tarea creada exitosamente', 201
+    
+class FileView(Resource):
+    @jwt_required()
+    def get(self, filename):
+        return 'Coming soon you would have ' + filename, 200

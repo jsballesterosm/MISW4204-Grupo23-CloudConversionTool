@@ -1,7 +1,7 @@
 from converter import create_app
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from .view import UserList, TaskList, Signup, Login
+from .view import UserListView, TaskListView, SignupView, LoginView, TaskView, FileView
 from .model import db, UserSchema, TaskSchema, User, Task
 
 app = create_app('default')
@@ -12,10 +12,12 @@ db.init_app(app)
 db.create_all()
 
 api = Api(app)
-api.add_resource(UserList, '/api/users')
-api.add_resource(TaskList, '/api/tasks')
-api.add_resource(Signup, '/api/auth/signup')
-api.add_resource(Login, '/api/auth/login')
+api.add_resource(UserListView, '/api/users')
+api.add_resource(TaskListView, '/api/tasks')
+api.add_resource(TaskView, '/api/tasks/<int:id_task>')
+api.add_resource(SignupView, '/api/auth/signup')
+api.add_resource(LoginView, '/api/auth/login')
+api.add_resource(FileView, '/api/files/<string:filename>')
 
 jwt = JWTManager(app)
 
