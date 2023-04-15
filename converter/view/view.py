@@ -1,7 +1,7 @@
 from marshmallow import ValidationError
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_restful import Resource
-from flask import request
+from flask import request, send_file
 from datetime import timedelta
 from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema, Status
 from ..tasks import compress_file
@@ -153,4 +153,20 @@ class TaskListView(Resource):
 class FileView(Resource):
     @jwt_required()
     def get(self, filename):
-        return 'Coming soon you would have ' + filename, 200
+        # Se utiliza os.path.join para establecer la ruta
+        input_file_path = os.path.join(os.getcwd(), upload_folder, filename)
+
+        # Se utiliza os.path.join para establecer la ruta
+        output_file_path = os.path.join(os.getcwd(), download_folder, filename)
+
+        # Check if the file exists
+        if os.path.exists(input_file_path):
+            # Use Flask's send_file function to return the file to the client
+            return send_file(input_file_path, as_attachment=True)
+        elif os.path.exists(output_file_path):
+            # Use Flask's send_file function to return the file to the client
+            return send_file(output_file_path, as_attachment=True)
+        else:
+            return {"Error": "File not found. Path: {}".format(os.getcwd())}, 404
+
+       
