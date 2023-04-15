@@ -3,8 +3,8 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from flask_restful import Resource
 from flask import request
 from datetime import timedelta
-from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema
-from ..tasks import convert_file
+from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema, Status
+from ..tasks import compress_file
 import os
 
 user_schema = UserSchema()
@@ -13,6 +13,20 @@ signup_schema = UserSignupSchema()
 
 upload_folder = './upload'
 download_folder = './download'
+
+# Se crea la carpeta para subir los archivos
+if not os.path.exists(upload_folder):
+    os.mkdir(upload_folder)
+    print("Creada carpeta {} exitosamente.".format(upload_folder))
+else:
+    print("Carpeta {} ya existe.".format(upload_folder))
+
+# Se crea la carpeta para descargar los archivos convertidos
+if not os.path.exists(download_folder):
+    os.mkdir(download_folder)
+    print("Creada carpeta {} exitosamente.".format(download_folder))
+else:
+    print("Carpeta {} ya existe.".format(download_folder))
 
 class SignupView(Resource):
     def post(self):
@@ -64,7 +78,6 @@ class LoginView(Resource):
             
         except ValidationError as e:
             return {"message": e.messages}, 400
-
 
 class UserListView(Resource):
     @jwt_required()
@@ -121,22 +134,21 @@ class TaskListView(Resource):
         user = User.query.filter_by(username=current_username).first()
 
         # Se cargan los valores de ka ruta del archivo y la nueva extensión 
-        file = request.json["fileName"]
+        file_name = request.json["fileName"]
         new_format = request.json["newFormat"]
         
-        # A partir de los valores establecidos se crea el path
-        file_path = os.path.join(upload_folder, file)
-
         # Se crea la nueva tarea en base de datos
-        new_task = Task(fileName=file, newFormat=new_format)
+        new_task = Task(fileName=file_name, newFormat=new_format)
         new_task.user = user.id
         db.session.add(new_task)
         db.session.commit()
 
-        # Se encola la tarea
-        task = convert_file.delay(file_path, new_format)
-
-        return 'Tarea creada exitosamente', 201
+        try:
+            # Se encola la tarea
+            compress_file.delay(file_name, new_format)
+            return {"message": "Tarea procesada satisfactoriamente"}, 200
+        except:
+            return {"message": "ERROR no se pudo procesar la solicitud"}, 500
     
 class FileView(Resource):
     @jwt_required()
