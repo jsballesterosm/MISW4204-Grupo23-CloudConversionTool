@@ -159,14 +159,14 @@ class FileView(Resource):
         # Se utiliza os.path.join para establecer la ruta
         output_file_path = os.path.join(os.getcwd(), download_folder, filename)
 
-        # Check if the file exists
+        # Revisar si existe el archivo
         if os.path.exists(input_file_path):
-            # Use Flask's send_file function to return the file to the client
+            # Se utiliza send_file para retornar el archivo
             return send_file(input_file_path, as_attachment=True)
         elif os.path.exists(output_file_path):
-            # Use Flask's send_file function to return the file to the client
+            # Se utiliza send_file para retornar el archivo
             return send_file(output_file_path, as_attachment=True)
         else:
-            return {"Error": "File not found. Path: {}".format(os.getcwd())}, 404
+            return {"Error": "Archivo no encontrado. Ruta: {}".format(os.getcwd())}, 404
 
        
