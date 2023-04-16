@@ -29,4 +29,4 @@ COPY . /code/
 #CMD ["flask", "run", "--host=0.0.0.0"]
 #CMD ["gunicorn", "app:app", "-c", "app.py"]
 #CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "--chdir /home/ubuntu/project/MISW4204-Grupo23-CloudConversionTool app:wsgi"]
-CMD gunicorn --bind 0.0.0.0:5000 -w 5 converter.wsgi:app
+CMD gunicorn --bind 0.0.0.0:5000 -w 5 wsgi:app
