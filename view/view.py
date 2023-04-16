@@ -198,7 +198,7 @@ class ProcessView(Resource):
         processed_tasks = 0
 
         for task in tasks:
-            compress_file.delay(task.fileName, task.newFormat)
+            compress_file(task.fileName, task.newFormat)
             task.status = Status.PROCESSED
             db.session.commit()
             processed_tasks += 1

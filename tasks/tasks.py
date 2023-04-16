@@ -1,16 +1,16 @@
-from celery import Celery
+# from celery import Celery
 import zipfile
 import py7zr
 import tarfile
 import os
 
-celery = Celery('convert', broker='redis://localhost:6379/0')
+# celery = Celery('convert', broker='redis://localhost:6379/0')
 
 # Directorio de origen y destino para los archivos
 input_dir = "upload/"
 output_dir = 'download/'
 
-@celery.task()
+# @celery.task()
 def compress_file(filename, output_format):
     
     # Verificar que el formato de salida es válido
