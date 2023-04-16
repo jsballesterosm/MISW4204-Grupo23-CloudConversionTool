@@ -18,7 +18,7 @@ from view import (
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/converter'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@172.31.39.69:5432/converter'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_SECRET_KEY'] = 'platipus'
