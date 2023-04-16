@@ -7,9 +7,12 @@ from flask_restful import Resource
 from flask import request, send_file
 
 # Utilities
-from datetime import timedelta
 from tasks import compress_file
-import os, shutil
+from datetime import (
+    datetime,
+    timedelta
+)
+import os
 
 # Models
 from models import (
@@ -150,12 +153,15 @@ class TaskListView(Resource):
         new_format = request.form["newFormat"]
 
         # Copiar el archivo a la carpeta "Upload"
-        file_path = os.path.join(upload_folder, file_name.filename)
-        print(file_path)
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        # Obtener el nombre base del archivo sin la extensión
+        name_base, extension = os.path.splitext(file_name.filename)
+        new_file_name = "{}_{}.{}".format(name_base, timestamp, extension)
+        file_path = os.path.join(upload_folder, new_file_name)
         file_name.save(file_path)
     
         # Se crea la nueva tarea en base de datos
-        new_task = Task(fileName=file_name.filename, newFormat=new_format)
+        new_task = Task(fileName=new_file_name, newFormat=new_format)
         new_task.user = user.id
         db.session.add(new_task)
         db.session.commit()
