@@ -146,28 +146,21 @@ class TaskListView(Resource):
         user = User.query.filter_by(username=current_username).first()
 
         # Se cargan los valores de ka ruta del archivo y la nueva extensión 
-        file_name = os.path.basename(request.json["fileName"])
-        new_format = request.json["newFormat"]
+        file_name = request.files["fileName"]
+        new_format = request.form["newFormat"]
 
-        # Se utiliza os.path.join para establecer la ruta
-        input_file_path = request.json["fileName"]
+        # Copiar el archivo a la carpeta "Upload"
+        file_path = os.path.join(upload_folder, file_name.filename)
+        print(file_path)
+        file_name.save(file_path)
+    
+        # Se crea la nueva tarea en base de datos
+        new_task = Task(fileName=file_name.filename, newFormat=new_format)
+        new_task.user = user.id
+        db.session.add(new_task)
+        db.session.commit()
 
-        # Revisar si existe el archivo
-        if os.path.exists(input_file_path):
-
-            # Copiar el archivo a la carpeta "upload"
-            new_file_path = os.path.join(os.getcwd(), "upload", file_name)
-            shutil.copyfile(input_file_path, new_file_path)
-        
-            # Se crea la nueva tarea en base de datos
-            new_task = Task(fileName=file_name, newFormat=new_format)
-            new_task.user = user.id
-            db.session.add(new_task)
-            db.session.commit()
-
-            return {"message": "Tarea creada satisfactoriamente."}, 201
-        else:
-            return {"error": "No se ha encontrado el archivo {}.".format(input_file_path)}, 404
+        return {"message": "Tarea creada satisfactoriamente."}, 201
     
 class FileView(Resource):
     @jwt_required()
