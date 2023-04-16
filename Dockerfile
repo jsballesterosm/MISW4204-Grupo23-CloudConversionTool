@@ -4,7 +4,7 @@ FROM python:3.8
 RUN mkdir /code
 
 # Set the working directory in the container to /app
-WORKDIR /converter
+WORKDIR /
 
 # Copy requeriments to code
 COPY requirements.txt /code/
