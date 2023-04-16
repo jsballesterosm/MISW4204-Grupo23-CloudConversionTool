@@ -4,8 +4,6 @@ import py7zr
 import tarfile
 import os
 
-from ..model import db, Task, Status
-
 celery = Celery('convert', broker='redis://localhost:6379/0')
 
 # Directorio de origen y destino para los archivos

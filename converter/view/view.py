@@ -1,11 +1,27 @@
+# libraries
 from marshmallow import ValidationError
+
+# flask libraries
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import request, send_file
+
+# utilities
 from datetime import timedelta
-from ..model import db, User, UserSchema, Task, TaskSchema, UserSignupSchema, UserLoginSchema, Status
-from ..tasks import compress_file
+from tasks import compress_file
 import os
+
+# models
+from models import (
+    db, 
+    User, 
+    UserSchema, 
+    Task, 
+    TaskSchema, 
+    UserSignupSchema, 
+    UserLoginSchema, 
+    Status
+)
 
 user_schema = UserSchema()
 task_schema = TaskSchema()
