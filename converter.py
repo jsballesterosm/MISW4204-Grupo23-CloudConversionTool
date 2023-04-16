@@ -1,19 +1,20 @@
-# flask library
+# Flask library
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-# models
+# Models
 from models import db
 
-# views
+# Views
 from view import (
     UserListView, 
     TaskListView, 
     SignupView, 
     LoginView, 
     TaskView, 
-    FileView
+    FileView,
+    ProcessView
 )
 
 app = Flask(__name__)
@@ -37,6 +38,7 @@ api.add_resource(TaskView, '/api/tasks/<int:id_task>')
 api.add_resource(SignupView, '/api/auth/signup')
 api.add_resource(LoginView, '/api/auth/login')
 api.add_resource(FileView, '/api/files/<string:filename>')
+api.add_resource(ProcessView, '/process')
 
 jwt = JWTManager(app)
 

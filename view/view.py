@@ -1,17 +1,17 @@
-# libraries
+# Libraries
 from marshmallow import ValidationError
 
-# flask libraries
+# Flask Libraries
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import request, send_file
 
-# utilities
+# Utilities
 from datetime import timedelta
 from tasks import compress_file
 import os
 
-# models
+# Models
 from models import (
     db, 
     User, 
@@ -34,15 +34,11 @@ download_folder = './download'
 if not os.path.exists(upload_folder):
     os.mkdir(upload_folder)
     print("Creada carpeta {} exitosamente.".format(upload_folder))
-else:
-    print("Carpeta {} ya existe.".format(upload_folder))
 
 # Se crea la carpeta para descargar los archivos convertidos
 if not os.path.exists(download_folder):
     os.mkdir(download_folder)
     print("Creada carpeta {} exitosamente.".format(download_folder))
-else:
-    print("Carpeta {} ya existe.".format(download_folder))
 
 class SignupView(Resource):
     def post(self):
@@ -159,12 +155,7 @@ class TaskListView(Resource):
         db.session.add(new_task)
         db.session.commit()
 
-        try:
-            # Se encola la tarea
-            compress_file.delay(file_name, new_format)
-            return {"message": "Tarea procesada satisfactoriamente"}, 200
-        except:
-            return {"message": "ERROR no se pudo procesar la solicitud"}, 500
+        return {"message": "Tarea creada satisfactoriamente."}, 201
     
 class FileView(Resource):
     @jwt_required()
@@ -184,5 +175,22 @@ class FileView(Resource):
             return send_file(output_file_path, as_attachment=True)
         else:
             return {"Error": "Archivo no encontrado. Ruta: {}".format(os.getcwd())}, 404
+        
+class ProcessView(Resource):
+    def get(self):
+        # Tareas con estado 'UPLOADED'
+        uploaded_tasks_query = db.session.query(Task).filter(Task.status == Status.UPLOADED)
+        
+        # Devolver las tareas serializadas
+        tasks = uploaded_tasks_query.all()
 
+        processed_tasks = 0
+
+        for task in tasks:
+            compress_file.delay(task.fileName, task.newFormat)
+            task.status = Status.PROCESSED
+            db.session.commit()
+            processed_tasks += 1
+
+        return {"Message": "Procesadas {} tareas".format(processed_tasks)}, 200
        
