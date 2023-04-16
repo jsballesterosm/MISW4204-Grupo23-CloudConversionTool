@@ -23,7 +23,7 @@ RUN pip install gunicorn
 #ENV FLASK_DEBUG=1
 # Expose port 5000 for the Flask development server to listen on
 #EXPOSE 5000
-ENV FLASK_APP=app.py
+ENV FLASK_APP=converter.py
 
 
 # Define the command to run the Flask development server
