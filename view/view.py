@@ -156,7 +156,7 @@ class TaskListView(Resource):
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         # Obtener el nombre base del archivo sin la extensión
         name_base, extension = os.path.splitext(file_name.filename)
-        new_file_name = "{}_{}.{}".format(name_base, timestamp, extension)
+        new_file_name = "{}_{}{}".format(name_base, timestamp, extension)
         file_path = os.path.join(upload_folder, new_file_name)
         file_name.save(file_path)
     
@@ -198,7 +198,7 @@ class ProcessView(Resource):
         processed_tasks = 0
 
         for task in tasks:
-            compress_file.delay(task.fileName, task.newFormat)
+            compress_file(task.fileName, task.newFormat)
             task.status = Status.PROCESSED
             db.session.commit()
             processed_tasks += 1
