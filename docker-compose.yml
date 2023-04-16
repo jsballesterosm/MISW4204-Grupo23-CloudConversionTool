@@ -15,19 +15,7 @@ services:
     volumes:
       - ./project:/home/ubuntu/project/data
     depends_on: 
-      - db
-  nginx:
-    container_name: cloud_conversion_nginx
-    restart: always
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    networks:
-      - web_net
-    volumes:
-      - ./default.conf:/etc/nginx/conf.d/
-    depends_on:
-      - app
+      - db  
   db: 
     container_name: cloud_conversion_db
     environment: 
