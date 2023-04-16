@@ -1,17 +1,17 @@
-# libraries
+# Libraries
 from marshmallow import ValidationError
 
-# flask libraries
+# Flask Libraries
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import request, send_file
 
-# utilities
+# Utilities
 from datetime import timedelta
 from tasks import compress_file
-import os
+import os, shutil
 
-# models
+# Models
 from models import (
     db, 
     User, 
@@ -34,15 +34,11 @@ download_folder = './download'
 if not os.path.exists(upload_folder):
     os.mkdir(upload_folder)
     print("Creada carpeta {} exitosamente.".format(upload_folder))
-else:
-    print("Carpeta {} ya existe.".format(upload_folder))
 
 # Se crea la carpeta para descargar los archivos convertidos
 if not os.path.exists(download_folder):
     os.mkdir(download_folder)
     print("Creada carpeta {} exitosamente.".format(download_folder))
-else:
-    print("Carpeta {} ya existe.".format(download_folder))
 
 class SignupView(Resource):
     def post(self):
@@ -150,21 +146,28 @@ class TaskListView(Resource):
         user = User.query.filter_by(username=current_username).first()
 
         # Se cargan los valores de ka ruta del archivo y la nueva extensión 
-        file_name = request.json["fileName"]
+        file_name = os.path.basename(request.json["fileName"])
         new_format = request.json["newFormat"]
-        
-        # Se crea la nueva tarea en base de datos
-        new_task = Task(fileName=file_name, newFormat=new_format)
-        new_task.user = user.id
-        db.session.add(new_task)
-        db.session.commit()
 
-        try:
-            # Se encola la tarea
-            compress_file.delay(file_name, new_format)
-            return {"message": "Tarea procesada satisfactoriamente"}, 200
-        except:
-            return {"message": "ERROR no se pudo procesar la solicitud"}, 500
+        # Se utiliza os.path.join para establecer la ruta
+        input_file_path = request.json["fileName"]
+
+        # Revisar si existe el archivo
+        if os.path.exists(input_file_path):
+
+            # Copiar el archivo a la carpeta "upload"
+            new_file_path = os.path.join(os.getcwd(), "upload", file_name)
+            shutil.copyfile(input_file_path, new_file_path)
+        
+            # Se crea la nueva tarea en base de datos
+            new_task = Task(fileName=file_name, newFormat=new_format)
+            new_task.user = user.id
+            db.session.add(new_task)
+            db.session.commit()
+
+            return {"message": "Tarea creada satisfactoriamente."}, 201
+        else:
+            return {"error": "No se ha encontrado el archivo {}.".format(input_file_path)}, 404
     
 class FileView(Resource):
     @jwt_required()
@@ -184,5 +187,22 @@ class FileView(Resource):
             return send_file(output_file_path, as_attachment=True)
         else:
             return {"Error": "Archivo no encontrado. Ruta: {}".format(os.getcwd())}, 404
+        
+class ProcessView(Resource):
+    def get(self):
+        # Tareas con estado 'UPLOADED'
+        uploaded_tasks_query = db.session.query(Task).filter(Task.status == Status.UPLOADED)
+        
+        # Devolver las tareas serializadas
+        tasks = uploaded_tasks_query.all()
 
+        processed_tasks = 0
+
+        for task in tasks:
+            compress_file.delay(task.fileName, task.newFormat)
+            task.status = Status.PROCESSED
+            db.session.commit()
+            processed_tasks += 1
+
+        return {"Message": "Procesadas {} tareas".format(processed_tasks)}, 200
        
