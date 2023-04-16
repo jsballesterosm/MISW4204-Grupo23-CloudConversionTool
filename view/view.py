@@ -156,7 +156,7 @@ class TaskListView(Resource):
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         # Obtener el nombre base del archivo sin la extensión
         name_base, extension = os.path.splitext(file_name.filename)
-        new_file_name = "{}_{}.{}".format(name_base, timestamp, extension)
+        new_file_name = "{}_{}{}".format(name_base, timestamp, extension)
         file_path = os.path.join(upload_folder, new_file_name)
         file_name.save(file_path)
     
