@@ -50,6 +50,7 @@ En la ruta raíz del proyecto ejecutamos la sentencia para subir el docker-compo
     ```shell
     sudo docker ps
     ```    
+    Resultado del comando
 ![image](https://user-images.githubusercontent.com/98661682/232354266-512b0316-f0ca-4152-9492-f76367be8837.png)
     
     Para bajar y remover los contenedores ejecutamos la sentencia
