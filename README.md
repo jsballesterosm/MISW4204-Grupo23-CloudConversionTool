@@ -36,7 +36,7 @@ Se realiza la configuración en el ambiente de desarrollo para ejecutar el Docke
 
 Realizada la instalación y configuración de la aplicación para trabajar con Docker-Compose se realiza el despliegue de la aplicación:
 
-Ejecución del Docker-compose
+## Ejecución del Docker-compose
 - Debemos tener instalado en el servidor docker y docker-compose
 En la ruta raíz del proyecto ejecutamos la sentencia para subir el docker-compose
     ```shell
