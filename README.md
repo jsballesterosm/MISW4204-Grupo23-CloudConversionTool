@@ -2,23 +2,23 @@
 Se realiza la configuración en la aplicación para trabajar con Docker-Compose el despliegue de la aplicación:
 
 📦 MISW4204-Grupo23-CloudConversionTool
- ┣---- 📂 models
- ┃     ┗---- 📜 __init__.py
- ┃     ┗---- 📜 model.py
- ┣---- 📂 tasks
- ┃     ┗---- 📜 __init__.py
- ┃     ┗---- 📜 tasks.py
- ┣---- 📂 view
- ┃     ┗---- 📜 __init__.py
- ┃     ┗---- 📜 view.py
- ┗---- 📜 .dockerignore
- ┗---- 📜 .gitignore
- ┗---- 📜 converter.py
- ┗---- 📜 docker-compose.yml
- ┗---- 📜 Dockerfile
- ┗---- 📜 Readme.md
- ┗---- 📜 requeriments.txt
- ┗---- 📜 wsgy.py
+┣---- 📂 models
+┃     ┗---- 📜 __init__.py
+┃     ┗---- 📜 model.py
+┣---- 📂 tasks
+┃     ┗---- 📜 __init__.py
+┃     ┗---- 📜 tasks.py
+┣---- 📂 view
+┃     ┗---- 📜 __init__.py
+┃     ┗---- 📜 view.py
+┗---- 📜 .dockerignore
+┗---- 📜 .gitignore
+┗---- 📜 converter.py
+┗---- 📜 docker-compose.yml
+┗---- 📜 Dockerfile
+┗---- 📜 Readme.md
+┗---- 📜 requeriments.txt
+┗---- 📜 wsgy.py
  
 Por último, se realiza la configuración para ejecutar el Docker-compose en el archivo Docker-compose.yml
  
