@@ -1,7 +1,7 @@
 # MISW4204-Grupo15-CloudConversionTool
 Se realiza la configuración en la aplicación para trabajar con Docker-Compose el despliegue de la aplicación:
 
-📦 MISW4204-Grupo23-CloudConversionTool\n
+📦 MISW4204-Grupo23-CloudConversionTool<br>
 ┣---- 📂 models
 ┃     ┗---- 📜 __init__.py
 ┃     ┗---- 📜 model.py
