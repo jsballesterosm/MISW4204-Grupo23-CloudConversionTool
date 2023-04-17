@@ -54,3 +54,8 @@ En la ruta raíz del proyecto ejecutamos la sentencia para subir el docker-compo
     ```shell
     sudo docker-compose down  
     ```
+
+## Ejecución del cronjob - proceso asincrónico
+Se realiza la creación de un cronjob que ejecuta el endpoint para procesar los archivos "http//:URI/api/process"
+
+![image](https://user-images.githubusercontent.com/98661682/232353520-ea4c530c-8177-47a4-b819-46d611e6ba05.png)
