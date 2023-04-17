@@ -11,18 +11,18 @@ Se realiza la configuración en la aplicación para trabajar con Docker-Compose 
  ┣---- 📂 view
  ┃     ┗---- 📜 __init__.py
  ┃     ┗---- 📜 view.py
- ┗---- 📜 .dockerignore [x]
+ ┗---- 📜 .dockerignore
  ┗---- 📜 .gitignore
  ┗---- 📜 converter.py
- ┗---- 📜 docker-compose.yml [x]
+ ┗---- 📜 docker-compose.yml
  ┗---- 📜 Dockerfile
- ┗---- 📜 Readme.md [x]
+ ┗---- 📜 Readme.md
  ┗---- 📜 requeriments.txt
- ┗---- 📜 wsgy.py [x]
+ ┗---- 📜 wsgy.py
  
 Por último, se realiza la configuración para ejecutar el Docker-compose en el archivo Docker-compose.yml
  
-
+![Archivoyml](https://user-images.githubusercontent.com/98661682/232351674-3d31cd7a-7ff6-464e-9a33-8aefc2b271df.png)
 
 Ejecución del Docker-compose
 •	Debemos tener instalado en el servidor docker y docker-compose 
