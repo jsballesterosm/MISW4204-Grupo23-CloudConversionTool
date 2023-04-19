@@ -2,7 +2,7 @@
 
 ### Permisos al archivo init
 ```shell
-- chmod +ux init.sh
+chmod +ux init.sh
 ```
 ### Ejecutar pruebas de cargas y de concurrencia
 ```shell
