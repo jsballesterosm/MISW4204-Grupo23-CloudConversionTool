@@ -9,4 +9,4 @@ echo -e "---"
 echo -e "PRUEBAS DE CARGA"
 echo "---"
 
-sh carga/n5000_c300.sh ${1} ${2}
+sh carga/n1000_c300.sh ${1} ${2}
