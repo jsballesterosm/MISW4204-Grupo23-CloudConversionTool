@@ -1,5 +1,5 @@
 set terminal png size 600
-set output "concurrencia/reportes/reporte_n500_c100.png"
+set output "concurrencia/reportes/reporte_n500_c500.png"
 set title "500 peticiones, 100 peticiones concurrentes"
 set size ratio 0.6
 set grid y
