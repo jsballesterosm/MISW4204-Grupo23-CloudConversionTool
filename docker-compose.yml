@@ -14,28 +14,9 @@ services:
       - DEBUG=0  
     volumes:
       - ./project:/home/ubuntu/project/data
-    depends_on: 
-      - db  
-  db: 
-    container_name: cloud_conversion_db
-    environment: 
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: cloud_conversion
-    image: "postgres:latest"
-    networks:
-      web_net: 
-        ipv4_address: 172.19.0.2
-    ports: 
-      - "5432:5432"
-    volumes: 
-      - ${PWD}/postgres-data:/var/lib/postgresql/data
 networks:
   web_net:
     ipam:
         config:
           - subnet: 172.19.0.0/16
     driver: bridge
-volumes: 
-  pg-data: 
-    driver: local
