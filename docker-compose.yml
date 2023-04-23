@@ -14,9 +14,9 @@ services:
       - DEBUG=0  
     volumes:
       - .:/app
-networks:
-  web_net:
-    ipam:
-        config:
-          - subnet: 172.19.0.0/16
-    driver: bridge
+# networks:
+#   web_net:
+#     ipam:
+#         config:
+#           - subnet: 172.19.0.0/16
+#     driver: bridge
