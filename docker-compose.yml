@@ -6,17 +6,17 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: converter_api_app
-    # networks:
-    #   - web_net 
+    networks:
+      - web_net 
     ports:
       - "5000:5000"
     environment:
       - DEBUG=0  
     volumes:
       - .:/app
-# networks:
-#   web_net:
-#     ipam:
-#         config:
-#           - subnet: 172.19.0.0/16
-#     driver: bridge
+networks:
+  web_net:
+    ipam:
+        config:
+          - subnet: 172.19.0.0/16
+    driver: bridge
