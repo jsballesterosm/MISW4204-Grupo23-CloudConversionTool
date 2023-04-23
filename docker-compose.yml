@@ -13,7 +13,7 @@ services:
     environment:
       - DEBUG=0  
     volumes:
-      - ./project:/home/ubuntu/project/data
+      - .:/app
 networks:
   web_net:
     ipam:
