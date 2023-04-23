@@ -19,7 +19,7 @@ from view import (
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:SN4kRspz%7#cb^;u@34.127.59.249:5432/cloud_conversion'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_SECRET_KEY'] = 'platipus'
