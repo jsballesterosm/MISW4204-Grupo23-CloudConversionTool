@@ -12,7 +12,7 @@ from tasks import compress_file
 
 
 # configuracion postgresq
-engine = create_engine('postgresql://postgres:SN4kRspz%7#cb^;u@34.127.59.249/cloud_conversion')
+engine = create_engine('postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion')
 
 session = Session(bind=engine)
 
