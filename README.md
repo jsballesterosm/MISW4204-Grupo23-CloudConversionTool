@@ -71,3 +71,4 @@ Se realiza la creación de un cronjob que ejecuta el endpoint para procesar los 
 - celery -A task worker -B --loglevel=info
 
 # configurar celery y redis
+sudo apt-get install redis-server
