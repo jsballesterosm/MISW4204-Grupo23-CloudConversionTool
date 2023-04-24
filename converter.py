@@ -19,7 +19,7 @@ from view import (
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@172.19.0.2:5432/cloud_conversion'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_SECRET_KEY'] = 'platipus'
@@ -39,6 +39,16 @@ api.add_resource(SignupView, '/api/auth/signup')
 api.add_resource(LoginView, '/api/auth/login')
 api.add_resource(FileView, '/api/files/<string:filename>')
 api.add_resource(ProcessView, '/process')
+
+import logging
+from logging.handlers import RotatingFileHandler
+
+file_handler = RotatingFileHandler('logs/myapp.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+file_handler.setLevel(logging.ERROR)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+
+app.logger.addHandler(file_handler)
 
 jwt = JWTManager(app)
 
