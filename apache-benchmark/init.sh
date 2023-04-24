@@ -9,162 +9,120 @@ echo -e "---"
 echo -e "PRUEBAS DE CARGA"
 echo "---"
 
-sh carga/n500_c100.sh ${1} ${2}
+sh carga/n500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1000_c100.sh ${1} ${2}
+sh carga/n1000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1500_c100.sh ${1} ${2}
+sh carga/n1500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2000_c100.sh ${1} ${2}
+sh carga/n2000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2500_c100.sh ${1} ${2}
+sh carga/n2500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3000_c100.sh ${1} ${2}
+sh carga/n3000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3500_c100.sh ${1} ${2}
+sh carga/n3500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4000_c100.sh ${1} ${2}
+sh carga/n4000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4500_c100.sh ${1} ${2}
+sh carga/n4500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n5000_c100.sh ${1} ${2}
+sh carga/n5000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n500_c200.sh ${1} ${2}
+sh carga/n5500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1000_c200.sh ${1} ${2}
+sh carga/n6000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1500_c200.sh ${1} ${2}
+sh carga/n6500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2000_c200.sh ${1} ${2}
+sh carga/n7000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2500_c200.sh ${1} ${2}
+sh carga/n7500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3000_c200.sh ${1} ${2}
+sh carga/n8000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3500_c200.sh ${1} ${2}
+sh carga/n8500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4000_c200.sh ${1} ${2}
+sh carga/n9000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4500_c200.sh ${1} ${2}
+sh carga/n9500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n5000_c200.sh ${1} ${2}
+sh carga/n10000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n500_c300.sh ${1} ${2}
+sh carga/n10500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1000_c300.sh ${1} ${2}
+sh carga/n11000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n1500_c300.sh ${1} ${2}
+sh carga/n11500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2000_c300.sh ${1} ${2}
+sh carga/n12000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n2500_c300.sh ${1} ${2}
+sh carga/n12500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3000_c300.sh ${1} ${2}
+sh carga/n13000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n3500_c300.sh ${1} ${2}
+sh carga/n13500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4000_c300.sh ${1} ${2}
+sh carga/n14000_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n4500_c300.sh ${1} ${2}
+sh carga/n14500_c30.sh ${1} ${2}
 
 sleep $TIME_SLEEP
 
-sh carga/n5000_c300.sh ${1} ${2}
-
-echo -e "---"
-echo -e "PRUEBAS DE CONCURRENCIA"
-echo "---"
-
-sh concurrencia/n500_c100.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c200.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c300.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c400.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c500.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c600.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c700.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c800.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c900.sh ${1} ${2}
-
-sleep $TIME_SLEEP
-
-sh concurrencia/n500_c1000.sh ${1} ${2}
+sh carga/n15000_c30.sh ${1} ${2}
