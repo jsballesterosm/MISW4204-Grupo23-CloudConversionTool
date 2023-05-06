@@ -1,5 +1,6 @@
 # Libraries
 from marshmallow import ValidationError
+from google.cloud import storage
 
 # Flask Libraries
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
@@ -30,9 +31,29 @@ user_schema = UserSchema()
 task_schema = TaskSchema()
 signup_schema = UserSignupSchema()
 
+
+#Se define la variable de ambiente para las credenciales
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/var/www/html/proyecto-conversion/uniandes_cloud_storage.json'
+storage_client = storage.Client()
+bucket_name = 'conversion-uniandes'
+
 upload_folder = './upload'
 download_folder = './download'
 
+def upload_to_bucket(blob_name, file_path):
+        try:
+            bucket = storage_client.get_bucket(bucket_name) 
+            blob = bucket.blob(upload_folder+'/'+blob_name)
+            blob.upload_from_filename(file_path)
+            print(bucket)
+            print(blob)
+            print(upload_folder)
+            print(blob_name)
+        except Exception as e:
+            #Guardar en el log
+            print(e)
+            return
+        
 # Se crea la carpeta para subir los archivos
 if not os.path.exists(upload_folder):
     os.mkdir(upload_folder)
@@ -159,6 +180,9 @@ class TaskListView(Resource):
         new_file_name = "{}_{}{}".format(name_base, timestamp, extension)
         file_path = os.path.join(upload_folder, new_file_name)
         file_name.save(file_path)
+
+        #Guardar en el bucket
+        upload_to_bucket(new_file_name, file_path)
     
         # Se crea la nueva tarea en base de datos
         new_task = Task(fileName=new_file_name, newFormat=new_format)
@@ -167,6 +191,8 @@ class TaskListView(Resource):
         db.session.commit()
 
         return {"message": "Tarea creada satisfactoriamente."}, 201
+    
+    
     
 class FileView(Resource):
     @jwt_required()
@@ -186,7 +212,8 @@ class FileView(Resource):
             return send_file(output_file_path, as_attachment=True)
         else:
             return {"Error": "Archivo no encontrado. Ruta: {}".format(os.getcwd())}, 404
-        
+          
+            
 class ProcessView(Resource):
     def get(self):
         # Tareas con estado 'UPLOADED'
