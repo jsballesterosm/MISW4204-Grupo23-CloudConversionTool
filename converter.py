@@ -4,10 +4,10 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 # Models
-from .models import db
+from models import db
 
 # Views
-from .view import (
+from view import (
     UserListView, 
     TaskListView, 
     SignupView, 

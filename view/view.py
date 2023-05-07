@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask import request, send_file
 
 # Utilities
-from ..tasks import compress_file
+from tasks import compress_file
 from datetime import (
     datetime,
     timedelta
@@ -16,7 +16,7 @@ from datetime import (
 import os
 
 # Models
-from ..models import (
+from models import (
     db, 
     User, 
     UserSchema, 
