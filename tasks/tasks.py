@@ -9,7 +9,7 @@ import os
 # Imports the Google Cloud client library
 from google.cloud import storage
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/home/credentials/uniandes_cloud_storage.json'
 
 #Se define la variable de ambiente para las credenciales
 storage_client = storage.Client()
