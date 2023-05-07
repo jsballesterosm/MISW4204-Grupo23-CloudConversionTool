@@ -86,7 +86,7 @@ lbl-template-backend-conversion
 
 ### aqui creamos la regla
 
-    ```shell
+ ```shell
      gcloud compute firewall-rules create fw-allow-health-check \
    --network=network-uniandes \
    --action=allow \
@@ -94,7 +94,7 @@ lbl-template-backend-conversion
    --source-ranges=34.105.0.0/22,34.168.0.0/16,104.198.0.0/16 \
    --target-tags=allow-health-check \
    --rules=tcp:80
-    ```
+ ```
 
 
 
