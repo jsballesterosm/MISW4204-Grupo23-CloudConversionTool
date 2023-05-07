@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from celery import Celery
-from celery.schedules import crontab
 
 # sqlalchemy libraries
 from sqlalchemy import create_engine
@@ -9,7 +8,6 @@ from sqlalchemy.orm import Session
 
 # functions
 from tasks import compress_file
-
 
 # configuracion postgresq
 engine = create_engine('postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion')
@@ -24,7 +22,6 @@ from models import (
 )
 
 app = Celery( 'task' , broker = 'redis://localhost:6379/0' ) 
-
 
 app.conf.beat_schedule = {
     'mi-tarea-diaria': {

@@ -37,8 +37,8 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/var/www/html/proyecto-conversio
 storage_client = storage.Client()
 bucket_name = 'conversion-uniandes'
 
-upload_folder = './upload'
-download_folder = './download'
+upload_folder = 'upload'
+download_folder = 'download'
 
 def upload_to_bucket(blob_name, file_path):
         try:

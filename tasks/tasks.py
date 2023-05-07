@@ -6,9 +6,43 @@ import os
 
 # celery = Celery('convert', broker='redis://localhost:6379/0')
 
+# Imports the Google Cloud client library
+from google.cloud import storage
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
+
+#Se define la variable de ambiente para las credenciales
+storage_client = storage.Client()
+bucket_name = 'conversion-uniandes'
+
 # Directorio de origen y destino para los archivos
 input_dir = "upload/"
 output_dir = 'download/'
+
+def upload_to_bucket(blob_name, file_path):
+        try:
+            bucket = storage_client.get_bucket(bucket_name) 
+            blob = bucket.blob(input_dir+blob_name)
+            blob.upload_from_filename(file_path)
+            print(bucket)
+            print(blob)
+            print(input_dir)
+            print(blob_name)
+        except Exception as e:
+            #Guardar en el log
+            print(e)
+            return
+        
+def download_file_from_bucket(blob_name, file_path):
+	try:
+		bucket = storage_client.get_bucket(bucket_name)
+		blob = bucket.blob(blob_name)
+		with open(file_path, "wb") as f:
+			storage_client.download_blob_to_file(blob, f)
+		return True
+	except Exception as e:
+		print(e)
+		return False
 
 # @celery.task()
 def compress_file(filename, output_format):
@@ -21,6 +55,8 @@ def compress_file(filename, output_format):
     # Obtener la ruta del archivo de entrada
     input_path = os.path.join(input_dir, filename)
 
+    download_file_from_bucket(filename, input_dir)
+
     # Verificar que el archivo de entrada existe
     if not os.path.isfile(input_path):
         raise FileNotFoundError(f"El archivo {filename} no existe en {input_dir}")
@@ -31,9 +67,12 @@ def compress_file(filename, output_format):
     if output_format == "zip":
         with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as z:
             z.write(input_path, arcname=filename)
+            upload_to_bucket(filename, output_path)
     elif output_format == "7z":
         with py7zr.SevenZipFile(output_path, "w") as z:
             z.write(input_path, arcname=filename)
+            upload_to_bucket(filename, output_path)
     elif output_format == "tar.bz2":
         with tarfile.open(output_path, "w:bz2") as t:
             t.add(input_path, arcname=filename)
+            upload_to_bucket(filename, output_path)
