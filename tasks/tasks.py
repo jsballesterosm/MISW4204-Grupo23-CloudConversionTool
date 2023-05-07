@@ -9,7 +9,7 @@ import os
 # Imports the Google Cloud client library
 from google.cloud import storage
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/home/credentials/uniandes_cloud_storage.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
 
 #Se define la variable de ambiente para las credenciales
 storage_client = storage.Client()
@@ -20,19 +20,14 @@ input_dir = "upload/"
 output_dir = 'download/'
 
 def upload_to_bucket(blob_name, file_path):
-        try:
-            bucket = storage_client.get_bucket(bucket_name) 
-            blob = bucket.blob(input_dir+blob_name)
-            blob.upload_from_filename(file_path)
-            print(bucket)
-            print(blob)
-            print(input_dir)
-            print(blob_name)
-        except Exception as e:
-            #Guardar en el log
-            print(e)
-            return
-        
+
+    bucket = storage_client.get_bucket(bucket_name) 
+
+    # como va a quedar en google
+    blob = bucket.blob(file_path)
+    # como se llama localmente
+    blob.upload_from_filename(file_path)
+
 def download_file_from_bucket(file_name, file_path):
     bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob('upload/'+file_name)
@@ -51,9 +46,9 @@ def compress_file(filename, output_format):
 
     download_file_from_bucket(filename, input_dir)
 
-    # Verificar que el archivo de entrada existe
-    if not os.path.isfile(input_path):
-        raise FileNotFoundError(f"El archivo {filename} no existe en {input_dir}")
+    # # Verificar que el archivo de entrada existe
+    # if not os.path.isfile(input_path):
+    #     raise FileNotFoundError(f"El archivo {filename} no existe en {input_dir}")
 
     # Comprimir el archivo de entrada y guardarlo en la carpeta de salida
     output_filename = os.path.splitext(filename)[0] + "." + output_format
