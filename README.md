@@ -72,3 +72,68 @@ Se realiza la creación de un cronjob que ejecuta el endpoint para procesar los 
 
 # configurar celery y redis
 sudo apt-get install redis-server
+
+
+# Paso a paso configuración balanceador de carga
+gcloud compute instance-groups managed create lb-backend-conversion-tool-group --template=lbl-template-backend-conversion --size=3 --zone=us-west1-a
+
+
+## Template disco
+lbl-template-blackend-conversion-tool
+
+## imagen
+lbl-template-backend-conversion
+
+### aqui creamos la regla
+
+gcloud compute firewall-rules create fw-allow-health-check \
+  --network=network-uniandes \
+  --action=allow \
+  --direction=ingress \
+  --source-ranges=34.105.0.0/22,34.168.0.0/16,104.198.0.0/16 \
+  --target-tags=allow-health-check \
+  --rules=tcp:80
+
+
+### creamos ip principal para el balanceo
+gcloud compute addresses create lb-ipv4-1 \
+  --ip-version=IPV4 \
+  --global
+
+## ip resultante
+34.160.199.235 
+
+
+## creacion de verificion de estado
+gcloud compute health-checks create http http-basic-check --port 80
+
+# creacion de servicio backend
+gcloud compute backend-services create web-backend-service \
+  --protocol=HTTP \
+  --port-name=http \
+  --health-checks=http-basic-check \
+  --global
+
+## asociamos el grupo de instancias previamente creado
+## al servicio backend
+gcloud compute backend-services add-backend web-backend-service \
+  --instance-group=lb-backend-conversion-tool-group \
+  --instance-group-zone=us-west1-a \
+  --global
+
+
+## creamos el mapa de urls para enturar el servicio 
+## de backend
+gcloud compute url-maps create web-map-http \
+    --default-service web-backend-service
+
+## creamos el proxy http para enrutar 
+gcloud compute target-http-proxies create http-lb-proxy \
+    --url-map web-map-http
+
+## Crea una regla de reenvío global para enrutar las solicitudes entrantes al proxy
+gcloud compute forwarding-rules create http-content-rule \
+    --address=lb-ipv4-1\
+    --global \
+    --target-http-proxy=http-lb-proxy \
+    --ports=80
