@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask import request, send_file
 
 # Utilities
-from tasks import compress_file
+from ..tasks import compress_file
 from datetime import (
     datetime,
     timedelta
@@ -16,7 +16,7 @@ from datetime import (
 import os
 
 # Models
-from models import (
+from ..models import (
     db, 
     User, 
     UserSchema, 
@@ -33,7 +33,7 @@ signup_schema = UserSignupSchema()
 
 
 #Se define la variable de ambiente para las credenciales
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/var/www/html/proyecto-conversion/uniandes_cloud_storage.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
 storage_client = storage.Client()
 bucket_name = 'conversion-uniandes'
 

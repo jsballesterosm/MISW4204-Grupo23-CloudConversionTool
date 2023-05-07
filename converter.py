@@ -4,10 +4,10 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 # Models
-from models import db
+from .models import db
 
 # Views
-from view import (
+from .view import (
     UserListView, 
     TaskListView, 
     SignupView, 
@@ -19,7 +19,7 @@ from view import (
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/cloud_conversion'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_SECRET_KEY'] = 'platipus'
