@@ -78,10 +78,10 @@ sudo apt-get install redis-server
 gcloud compute instance-groups managed create lb-backend-conversion-tool-group --template=lbl-template-backend-conversion --size=3 --zone=us-west1-a
 
 
-## Template disco
+### Template disco
 lbl-template-blackend-conversion-tool
 
-## imagen
+### imagen
 lbl-template-backend-conversion
 
 ### aqui creamos la regla
@@ -105,16 +105,16 @@ lbl-template-backend-conversion
     --global
   ```
 
-## ip resultante
+### ip resultante
 ```shell
 34.160.199.235 
 ```
-## creacion de verificion de estado
+### creacion de verificion de estado
 ```shell
 gcloud compute health-checks create http http-basic-check --port 80
 ```
 
-## creacion de servicio backend
+### creacion de servicio backend
 ```shell
 gcloud compute backend-services create web-backend-service \
   --protocol=HTTP \
@@ -123,8 +123,7 @@ gcloud compute backend-services create web-backend-service \
   --global
 ```  
 
-## asociamos el grupo de instancias previamente creado
-## al servicio backend
+### asociamos el grupo de instancias previamente creado al servicio backend
 ```shell
 gcloud compute backend-services add-backend web-backend-service \
   --instance-group=lb-backend-conversion-tool-group \
@@ -133,20 +132,19 @@ gcloud compute backend-services add-backend web-backend-service \
 ```    
 
 
-## creamos el mapa de urls para enturar el servicio 
-## de backend
+### creamos el mapa de urls para enturar el servicio de backend
 ```shell
 gcloud compute url-maps create web-map-http \
     --default-service web-backend-service
 ```    
 
-## creamos el proxy http para enrutar 
+### creamos el proxy http para enrutar 
 ```shell
 gcloud compute target-http-proxies create http-lb-proxy \
     --url-map web-map-http
 ```     
 
-## Crea una regla de reenvío global para enrutar las solicitudes entrantes al proxy
+### Crea una regla de reenvío global para enrutar las solicitudes entrantes al proxy
 ```shell
 gcloud compute forwarding-rules create http-content-rule \
     --address=lb-ipv4-1\
