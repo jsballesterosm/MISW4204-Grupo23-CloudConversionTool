@@ -33,16 +33,10 @@ def upload_to_bucket(blob_name, file_path):
             print(e)
             return
         
-def download_file_from_bucket(blob_name, file_path):
-	try:
-		bucket = storage_client.get_bucket(bucket_name)
-		blob = bucket.blob(blob_name)
-		with open(file_path, "wb") as f:
-			storage_client.download_blob_to_file(blob, f)
-		return True
-	except Exception as e:
-		print(e)
-		return False
+def download_file_from_bucket(file_name, file_path):
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob('upload/'+file_name)
+    blob.download_to_filename('upload/'+file_name)
 
 # @celery.task()
 def compress_file(filename, output_format):
