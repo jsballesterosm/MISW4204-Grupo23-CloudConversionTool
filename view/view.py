@@ -27,6 +27,17 @@ from models import (
     Status
 )
 
+import json
+from google.cloud import pubsub_v1
+
+# Se crea una instancia del publisher de Pub/Sub
+publisher = pubsub_v1.PublisherClient()
+
+# Se define el ID del proyecto y el nombre del tema así como el nombre de la suscripción
+project_id = "uniandes-384423"
+subscription_name = "conversion-sub"
+topic_name = "conversion"
+
 user_schema = UserSchema()
 task_schema = TaskSchema()
 signup_schema = UserSignupSchema()
@@ -190,7 +201,22 @@ class TaskListView(Resource):
         db.session.add(new_task)
         db.session.commit()
 
-        return {"message": "Tarea creada satisfactoriamente."}, 201
+        # Crea un diccionario JSON para enviar la información de la tarea a procesar
+        data = {
+            'taskId': new_task.id,
+            'taskFilename': new_task.fileName,
+            'taskNewFormat': new_task.newFormat
+        }
+
+        topic_path = publisher.topic_path(project_id, topic_name)
+
+        # Se convierte el diccionario JSON en una cadena de texto
+        json_data = json.dumps(data)
+
+        # Se publica el mensaje en el tema
+        publisher.publish(topic_path, data=json_data.encode('utf-8'))
+
+        return {"message": "Tarea encolada satisfactoriamente."}, 201
     
     
     
