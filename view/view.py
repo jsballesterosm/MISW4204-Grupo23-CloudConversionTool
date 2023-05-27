@@ -29,6 +29,7 @@ from models import (
 
 import json
 from google.cloud import pubsub_v1
+from google.oauth2 import service_account
 
 # Se crea una instancia del publisher de Pub/Sub
 publisher = pubsub_v1.PublisherClient()
@@ -44,8 +45,12 @@ signup_schema = UserSignupSchema()
 
 
 #Se define la variable de ambiente para las credenciales
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
-storage_client = storage.Client()
+try:
+    info = json.loads(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
+except:
+    GS_CREDENTIALS = None
+storage_client = storage.Client(credentials=GS_CREDENTIALS)
 bucket_name = 'conversion-uniandes'
 
 upload_folder = 'upload'

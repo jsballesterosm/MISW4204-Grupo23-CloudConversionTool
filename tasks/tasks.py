@@ -3,16 +3,22 @@ import zipfile
 import py7zr
 import tarfile
 import os
+import json
 
 # celery = Celery('convert', broker='redis://localhost:6379/0')
 
 # Imports the Google Cloud client library
 from google.cloud import storage
+from google.oauth2 import service_account
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'uniandes_cloud_storage.json'
+try:
+    info = json.loads(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
+except:
+    GS_CREDENTIALS = None
 
 #Se define la variable de ambiente para las credenciales
-storage_client = storage.Client()
+storage_client = storage.Client(credentials=GS_CREDENTIALS)
 bucket_name = 'conversion-uniandes'
 
 # Directorio de origen y destino para los archivos

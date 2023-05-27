@@ -1,5 +1,6 @@
 import json
 from google.cloud import pubsub_v1
+from google.oauth2 import service_account
 import os
 import time
 
@@ -8,9 +9,16 @@ subscription_name = "conversion-sub"
 topic_name = "conversion"
 
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+
+try:
+    info = json.loads(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
+except:
+    GS_CREDENTIALS = None
+
 # Se crea una instancia del publisher de Pub/Sub
-publisher = pubsub_v1.PublisherClient()
+publisher = pubsub_v1.PublisherClient(credentials=GS_CREDENTIALS)
 
 
 topic_path = publisher.topic_path(project_id, topic_name)
