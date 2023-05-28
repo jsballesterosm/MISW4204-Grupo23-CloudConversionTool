@@ -19,6 +19,7 @@ except:
     info = None
 
 # Crea una instancia del cliente
+# Crea una instancia del cliente
 subscriber = pubsub_v1.SubscriberClient.from_service_account_info(info)
 
 # Crea una instancia del cliente
