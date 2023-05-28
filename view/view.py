@@ -32,7 +32,11 @@ from google.cloud import pubsub_v1
 from google.oauth2 import service_account
 
 # Se crea una instancia del publisher de Pub/Sub
-publisher = pubsub_v1.PublisherClient()
+try:
+    info = json.loads(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+except:
+    info = None
+publisher = pubsub_v1.PublisherClient.from_service_account_info(info)
 
 # Se define el ID del proyecto y el nombre del tema así como el nombre de la suscripción
 project_id = "uniandes-384423"
@@ -45,12 +49,8 @@ signup_schema = UserSignupSchema()
 
 
 #Se define la variable de ambiente para las credenciales
-try:
-    info = json.loads(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
-except:
-    GS_CREDENTIALS = None
-storage_client = storage.Client(credentials=GS_CREDENTIALS)
+storage_client = storage.Client.from_service_account_info(info)
+
 bucket_name = 'conversion-uniandes'
 
 upload_folder = 'upload'

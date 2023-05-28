@@ -1,6 +1,6 @@
 from datetime import timedelta
 from celery import Celery
-import time, json
+import time, json, os
 
 # sqlalchemy libraries
 from sqlalchemy import create_engine
@@ -13,11 +13,16 @@ from tasks import compress_file
 # pub-sub
 from google.cloud import pubsub_v1
 
-# Crea una instancia del cliente
-subscriber = pubsub_v1.SubscriberClient()
+try:
+    info = json.loads(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+except:
+    info = None
 
 # Crea una instancia del cliente
-publisher = pubsub_v1.PublisherClient()
+subscriber = pubsub_v1.SubscriberClient.from_service_account_info(info)
+
+# Crea una instancia del cliente
+publisher = pubsub_v1.PublisherClient.from_service_account_info(info)
 
 # configuracion postgresq
 engine = create_engine('postgresql://postgres:SN4kRspz%7#cb^;u@10.32.80.3/cloud_conversion')
