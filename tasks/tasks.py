@@ -12,7 +12,7 @@ from google.cloud import storage
 from google.oauth2 import service_account
 
 try:
-    info = json.loads(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    info = json.loads(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
 except:
     GS_CREDENTIALS = None
